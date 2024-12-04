@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyDnX6OrH84UyfjE7ujWzKbh0EqIoMhk2wc</string>
+	<string>AIzaSyB7TUgaW2oRbWWlcsoEvhqvxihkL0Lywpk</string>
 	<key>GCM_SENDER_ID</key>
-	<string>319612661098</string>
+	<string>266521930198</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.hong.RecipeBytes-iOS</string>
 	<key>PROJECT_ID</key>
-	<string>recipebytes-13375</string>
+	<string>recipebytesios</string>
 	<key>STORAGE_BUCKET</key>
-	<string>recipebytes-13375.firebasestorage.app</string>
+	<string>recipebytesios.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:319612661098:ios:81a72a1c5f6c5831224913</string>
+	<string>1:266521930198:ios:d263a32fafd5a599199c77</string>
 </dict>
 </plist>

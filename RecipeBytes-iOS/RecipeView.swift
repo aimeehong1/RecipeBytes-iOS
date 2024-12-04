@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct RecipeView: View {
     var body: some View {
@@ -20,50 +21,12 @@ struct RecipeView: View {
                     .foregroundStyle(.white)
                 
                 Spacer()
+                
+                Text("Hello \(Auth.auth().currentUser?.displayName ?? "Guest")!")
+                    .customStyle()
+                
+                Spacer()
             }
-            .toolbar {
-                ToolbarItem(placement: .bottomBar) {
-                    NavigationLink {
-                        
-                    } label: {
-                        VStack {
-                            Image(systemName: "fork.knife.circle")
-                            Text("Recipes")
-                        }
-                    }
-                }
-                ToolbarItem(placement: .bottomBar) {
-                    NavigationLink {
-                        
-                    } label: {
-                        VStack {
-                            Image(systemName: "list.bullet.clipboard")
-                            Text("Grocery List")
-                        }
-                    }
-                }
-                ToolbarItem(placement: .bottomBar) {
-                    NavigationLink {
-                        
-                    } label: {
-                        VStack {
-                            Image(systemName: "carrot")
-                            Text("Pantry Tracker")
-                        }
-                    }
-                }
-                ToolbarItem(placement: .bottomBar) {
-                    NavigationLink {
-                        ProfileView()
-                    } label: {
-                        VStack {
-                            Image(systemName: "person.circle")
-                            Text("Profile")
-                        }
-                    }
-                }
-            }
-            .tint(.color)
         }
     }
 }

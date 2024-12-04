@@ -29,7 +29,7 @@ struct LoginView: View {
     var body: some View {
         VStack {
             Text("Recipe Bytes")
-                .font(Font.custom("PatrickHandSC-Regular", size: 50))
+                .font(Font.custom("PatrickHandSC-Regular", size: 40))
                 .bold()
                 .padding()
                 .frame(maxWidth: .infinity)
@@ -38,7 +38,7 @@ struct LoginView: View {
             
             Spacer()
             
-            Image("logo")
+            Image("login")
                 .resizable()
                 .scaledToFit()
                 .padding()
@@ -183,11 +183,40 @@ struct LoginView: View {
             }
         }
         .fullScreenCover(isPresented: $presentSheet) {
-            RecipeView()
+            ContentView()
         }
     }
     
     func register() {
+        validateInputs()
+        
+        Auth.auth().createUser(withEmail: email, password: password) { result, error in
+            if let error = error { // login error occurred
+                print("😡 SIGN-UP ERROR: \(error.localizedDescription)")
+                alertMessage = "SIGN-UP ERROR: \(error.localizedDescription)"
+                showingAlert = true
+            } else {
+                print("😎 Registration success!")
+                ProfileViewModel.updateUserProfile(displayName: displayName, photoURL: URL(string: ""))
+                presentSheet = true
+            }
+        }
+    }
+    
+    func login() {
+        Auth.auth().signIn(withEmail: email, password: password) { result, error in
+            if let error = error { // login error occurred
+                print("😡 LOGIN ERROR: \(error.localizedDescription)")
+                alertMessage = "LOGIN ERROR: \(error.localizedDescription)"
+                showingAlert = true
+            } else {
+                print("🪵 Login Successful!")
+                presentSheet = true
+            }
+        }
+    }
+    
+    func validateInputs() {
         let emailIsGood = email.count >= 6 && email.contains("@")
         let passwordIsGood = password.count >= 6
         if !emailIsGood {
@@ -205,35 +234,6 @@ struct LoginView: View {
             showingAlert = true
         }
         if !(emailIsGood && passwordIsGood) { return }
-        
-        Auth.auth().createUser(withEmail: email, password: password) { result, error in
-            if let error = error { // login error occurred
-                print("😡 SIGN-UP ERROR: \(error.localizedDescription)")
-                alertMessage = "SIGN-UP ERROR: \(error.localizedDescription)"
-                showingAlert = true
-            } else {
-                print("😎 Registration success!")
-                presentSheet = true
-            }
-        }
-//        let changeRequest = Auth.auth().currentUser?.createProfileChangeRequest()
-//        changeRequest?.displayName = displayName
-//        changeRequest?.commitChanges { (error) in
-//          // ...
-//        }
-    }
-    
-    func login() {
-        Auth.auth().signIn(withEmail: email, password: password) { result, error in
-            if let error = error { // login error occurred
-                print("😡 LOGIN ERROR: \(error.localizedDescription)")
-                alertMessage = "LOGIN ERROR: \(error.localizedDescription)"
-                showingAlert = true
-            } else {
-                print("🪵 Login Successful!")
-                presentSheet = true
-            }
-        }
     }
 }
 
