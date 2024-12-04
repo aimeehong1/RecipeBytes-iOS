@@ -34,41 +34,47 @@ struct ProfileView: View {
                 .font(Font.custom("PatrickHandSC-Regular", size: 30))
                 .padding()
                 .frame(maxWidth: .infinity)
-                .background(.color)
+                .background(.logo)
                 .foregroundStyle(.white)
                 
                 Spacer()
                 
-                AsyncImage(url: Auth.auth().currentUser?.photoURL) { image in
-                    image
+                if Auth.auth().currentUser?.photoURL == nil {
+                    Image(systemName: "person.circle")
                         .resizable()
                         .frame(width: 180, height: 180)
                         .scaledToFill()
-                        .clipShape(Circle())
-                        .overlay(
-                            Circle()
-                                .stroke(.black, lineWidth: 2)
-                        )
-                } placeholder: {
-                    ProgressView()
-                        .scaleEffect(4)
-                        .tint(.color)
+                } else {
+                    AsyncImage(url: Auth.auth().currentUser?.photoURL) { image in
+                        image
+                            .resizable()
+                            .frame(width: 180, height: 180)
+                            .scaledToFill()
+                            .clipShape(Circle())
+                            .overlay(
+                                Circle()
+                                    .stroke(.black, lineWidth: 2)
+                            )
+                    } placeholder: {
+                        ProgressView()
+                            .scaleEffect(4)
+                            .tint(.logo)
+                    }
                 }
-                
                 if !textFieldsDisabled {
                     Button("Change Image") {
                         pickerIsPresented.toggle()
                         textFieldsDisabled.toggle()
                     }
                     .buttonStyle(.bordered)
-                    .tint(.color)
+                    .tint(.logo)
                     .frame(height: 20)
                     .padding(.top)
                     .font(Font.custom("PatrickHandSC-Regular", size: 20))
                 } else {
                     Button("") { }
-                    .frame(height: 20)
-                    .padding(.top)
+                        .frame(height: 20)
+                        .padding(.top)
                 }
                 
                 Spacer()
@@ -80,7 +86,7 @@ struct ProfileView: View {
                     TextField("", text: $displayName)
                         .disabled(textFieldsDisabled)
                         .textFieldStyle(.roundedBorder)
-                        .foregroundStyle(textFieldsDisabled ? .color : .black)
+                        .foregroundStyle(textFieldsDisabled ? .logo : .black)
                         .font(Font.custom("PatrickHandSC-Regular", size: 20))
                     
                     if !textFieldsDisabled {
@@ -90,7 +96,7 @@ struct ProfileView: View {
                             ProfileViewModel.refreshUserProfile()
                         }
                         .buttonStyle(.bordered)
-                        .tint(.color)
+                        .tint(.logo)
                         .font(Font.custom("PatrickHandSC-Regular", size: 15))
                         .frame(height: 15)
                     }
@@ -104,7 +110,7 @@ struct ProfileView: View {
                     TextField("", text: $email)
                         .disabled(true)
                         .textFieldStyle(.roundedBorder)
-                        .foregroundStyle(.color)
+                        .foregroundStyle(.logo)
                 }
                 .bold()
                 .padding(.horizontal)
@@ -128,7 +134,7 @@ struct ProfileView: View {
                     }
                 }
                 .buttonStyle(.borderedProminent)
-                .tint(.color)
+                .tint(.logo)
                 .font(Font.custom("PatrickHandSC-Regular", size: 22))
                 
                 Spacer()

@@ -6,8 +6,12 @@
 //
 
 import SwiftUI
+import FirebaseFirestore
 
 struct GroceryView: View {
+    @FirestoreQuery(collectionPath: "grocery") var grocery: [Item]
+    @State private var categorizedItems: [FoodType: [Item]] = [:]
+    @State private var sheetIsPresented = false
     var body: some View {
         VStack {
             HStack {
@@ -20,23 +24,76 @@ struct GroceryView: View {
             .font(Font.custom("PatrickHandSC-Regular", size: 30))
             .padding()
             .frame(maxWidth: .infinity)
-            .background(.color)
+            .background(.logo)
             .foregroundStyle(.white)
             
-            ScrollView {
+            NavigationStack {
                 VStack {
-                    Text("Grocery List")
-                        .font(Font.custom("PatrickHandSC-Regular", size: 25))
+                    HStack {
+                        Button("") {}
+                        Spacer()
+                        
+                        Text("Grocery List")
+                            .font(Font.custom("PatrickHandSC-Regular", size: 30))
+                        
+                        Spacer()
 
-                    List {
-                        Section {
-                            Text("Potatoes 🥔")
-                            Text("Produce")
-                        } header: {
-                            Text("Produce")
+                        Button {
+                            sheetIsPresented.toggle()
+                        } label: {
+                            Image(systemName: "plus")
+                                .tint(.logo)
                         }
                     }
+                    .padding()
+                 
+                    groceryList
                 }
+            }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        sheetIsPresented.toggle()
+                    } label: {
+                        Image(systemName: "plus")
+                            .tint(.white)
+                    }
+                    
+                }
+            }
+            .onAppear() {
+                fetchAllCategories()
+            }
+            .onChange(of: grocery) {
+                fetchAllCategories()
+            }
+            .sheet(isPresented: $sheetIsPresented) {
+                NavigationStack {
+                    ItemDetailView(item: Item(), collection: "grocery")
+                }
+            }
+        }
+    }
+    
+    func fetchCategoryData(for category: FoodType, completion: @escaping ([Item]) -> Void) {
+        let db = Firestore.firestore()
+        db.collection("grocery").whereField("type", isEqualTo: category.rawValue).getDocuments { snapshot, error in
+            if let error = error {
+                print("Error fetching \(category.rawValue): \(error.localizedDescription)")
+                completion([])
+            } else {
+                let items = snapshot?.documents.compactMap { doc -> Item? in
+                    try? doc.data(as: Item.self)
+                } ?? []
+                completion(items)
+            }
+        }
+    }
+    
+    func fetchAllCategories() {
+        for category in FoodType.allCases {
+            fetchCategoryData(for: category ) { items in
+                categorizedItems[category] = items
             }
         }
     }
@@ -44,4 +101,43 @@ struct GroceryView: View {
 
 #Preview {
     GroceryView()
+}
+
+extension GroceryView {
+    var groceryList: some View {
+        List {
+            ForEach(FoodType.allCases, id: \.self) { category in
+                Section {
+                    if let items = categorizedItems[category] {
+                        ForEach(items) { item in
+                            NavigationLink {
+                                ItemDetailView(item: item, collection: "grocery")
+                            } label: {
+                                HStack {
+                                    Image(systemName: item.isChecked ? "checkmark.square" : "square")
+                                        .onTapGesture {
+                                            ItemViewModel.toggleCheck(item: item, collection: "grocery")
+                                        }
+                                    Text(item.name)
+                                    if item.quantity > 1 {
+                                        Text("(\(item.quantity))")
+                                    }
+                                }
+                            }
+                            .font(Font.custom("PatrickHandSC-Regular", size: 20))
+                            .swipeActions {
+                                Button("Delete", role: .destructive) {
+                                    ItemViewModel.deleteItem(item: item, collection: "grocery")
+                                }
+                            }
+                        }
+                    }
+                } header: {
+                    Text(category.rawValue.capitalized)
+                }
+            }
+        }
+        .listStyle(.plain)
+        .headerProminence(.increased)
+    }
 }

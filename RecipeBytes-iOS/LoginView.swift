@@ -33,7 +33,7 @@ struct LoginView: View {
                 .bold()
                 .padding()
                 .frame(maxWidth: .infinity)
-                .background(.color)
+                .background(.logo)
                 .foregroundStyle(.white)
             
             Spacer()
@@ -95,7 +95,7 @@ struct LoginView: View {
                 .buttonStyle(.borderedProminent)
                 .font(Font.custom("PatrickHandSC-Regular", size: 20))
                 .padding(.top)
-                .tint(.color)
+                .tint(.logo)
             } else {
                 Group {
                     TextField("Name", text: $displayName)
@@ -167,7 +167,7 @@ struct LoginView: View {
                 .buttonStyle(.borderedProminent)
                 .font(Font.custom("PatrickHandSC-Regular", size: 20))
                 .padding(.top)
-                .tint(.color)
+                .tint(.logo)
             }
             
             Spacer()

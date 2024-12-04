@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		902114322CFF5624002DDFF2 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902114312CFF5624002DDFF2 /* ProfileViewModel.swift */; };
 		902114342CFF6C06002DDFF2 /* GroceryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902114332CFF6C06002DDFF2 /* GroceryView.swift */; };
 		902114362CFF7BDF002DDFF2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902114352CFF7BDF002DDFF2 /* ContentView.swift */; };
 		9021143A2CFF81E0002DDFF2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 902114392CFF81E0002DDFF2 /* GoogleService-Info.plist */; };
@@ -17,6 +16,7 @@
 		902114432CFF958A002DDFF2 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902114422CFF958A002DDFF2 /* Item.swift */; };
 		902114452CFFBA37002DDFF2 /* PantryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902114442CFFBA37002DDFF2 /* PantryView.swift */; };
 		904F08FC2CFCD5AE00030EAC /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 904F08FB2CFCD5AE00030EAC /* ProfileView.swift */; };
+		906BAF8B2D0017D800F62E4F /* ItemDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 906BAF8A2D0017D800F62E4F /* ItemDetailView.swift */; };
 		908202B02CFC2602002C77CF /* RecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 908202AB2CFC2602002C77CF /* RecipeView.swift */; };
 		908202B12CFC2602002C77CF /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 908202AD2CFC2602002C77CF /* LoginView.swift */; };
 		908202B22CFC2602002C77CF /* RecipeBytes_iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 908202AE2CFC2602002C77CF /* RecipeBytes_iOSApp.swift */; };
@@ -27,7 +27,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		902114312CFF5624002DDFF2 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		902114332CFF6C06002DDFF2 /* GroceryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroceryView.swift; sourceTree = "<group>"; };
 		902114352CFF7BDF002DDFF2 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		902114392CFF81E0002DDFF2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -35,6 +34,7 @@
 		902114442CFFBA37002DDFF2 /* PantryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PantryView.swift; sourceTree = "<group>"; };
 		904F08FB2CFCD5AE00030EAC /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		906606B22CF53610006C7A72 /* RecipeBytes-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RecipeBytes-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		906BAF8A2D0017D800F62E4F /* ItemDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDetailView.swift; sourceTree = "<group>"; };
 		908202A82CFC2602002C77CF /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		908202AA2CFC2602002C77CF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		908202AB2CFC2602002C77CF /* RecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeView.swift; sourceTree = "<group>"; };
@@ -44,6 +44,14 @@
 		909313742CFE2DEB00B5E54A /* PatrickHandSC-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PatrickHandSC-Regular.ttf"; sourceTree = "<group>"; };
 		909313782CFE846E00B5E54A /* CustomStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomStyle.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		906BAF892D00179700F62E4F /* View Models */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "View Models";
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		906606AF2CF53610006C7A72 /* Frameworks */ = {
@@ -102,8 +110,9 @@
 				902114332CFF6C06002DDFF2 /* GroceryView.swift */,
 				902114442CFFBA37002DDFF2 /* PantryView.swift */,
 				904F08FB2CFCD5AE00030EAC /* ProfileView.swift */,
+				906BAF8A2D0017D800F62E4F /* ItemDetailView.swift */,
+				906BAF892D00179700F62E4F /* View Models */,
 				902114422CFF958A002DDFF2 /* Item.swift */,
-				902114312CFF5624002DDFF2 /* ProfileViewModel.swift */,
 				909313782CFE846E00B5E54A /* CustomStyle.swift */,
 				908202AA2CFC2602002C77CF /* Assets.xcassets */,
 				909313742CFE2DEB00B5E54A /* PatrickHandSC-Regular.ttf */,
@@ -127,6 +136,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				906BAF892D00179700F62E4F /* View Models */,
 			);
 			name = "RecipeBytes-iOS";
 			packageProductDependencies = (
@@ -194,6 +206,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				906BAF8B2D0017D800F62E4F /* ItemDetailView.swift in Sources */,
 				904F08FC2CFCD5AE00030EAC /* ProfileView.swift in Sources */,
 				902114432CFF958A002DDFF2 /* Item.swift in Sources */,
 				908202B02CFC2602002C77CF /* RecipeView.swift in Sources */,
@@ -202,7 +215,6 @@
 				902114342CFF6C06002DDFF2 /* GroceryView.swift in Sources */,
 				908202B12CFC2602002C77CF /* LoginView.swift in Sources */,
 				909313792CFE846E00B5E54A /* CustomStyle.swift in Sources */,
-				902114322CFF5624002DDFF2 /* ProfileViewModel.swift in Sources */,
 				908202B22CFC2602002C77CF /* RecipeBytes_iOSApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

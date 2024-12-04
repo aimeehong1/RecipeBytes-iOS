@@ -22,7 +22,7 @@ struct RecipeView: View {
                 .font(Font.custom("PatrickHandSC-Regular", size: 30))
                 .padding()
                 .frame(maxWidth: .infinity)
-                .background(.color)
+                .background(.logo)
                 .foregroundStyle(.white)
                 
                 Spacer()

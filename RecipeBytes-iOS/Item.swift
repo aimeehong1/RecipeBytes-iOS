@@ -12,10 +12,11 @@ enum FoodType: String, CaseIterable, Codable {
     case produce, protein, dairy, grains, other
 }
 
-struct Item: Codable, Identifiable {
+struct Item: Codable, Identifiable, Equatable {
     @DocumentID var id: String?
     var name = ""
     var quantity = 0
     var type: FoodType = .produce
-    var expirationData = Date()
+    var expirationDate = Date()
+    var isChecked = false
 }

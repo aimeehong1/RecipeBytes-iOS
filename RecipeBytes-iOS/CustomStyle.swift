@@ -14,7 +14,7 @@ struct CustomStyle: ViewModifier {
             .font(Font.custom("PatrickHandSC-Regular", size: 20))
             .foregroundStyle(.white)
             .padding()
-            .background(.color)
+            .background(.logo)
             .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 }
