@@ -24,44 +24,51 @@ struct ProfileView: View {
     var body: some View {
         NavigationStack {
             VStack(alignment: .center) {
-                Text("Recipe Bytes")
-                    .font(Font.custom("PatrickHandSC-Regular", size: 40))
+                HStack {
+                    VStack {
+                        Text("Recipe Bytes")
+                    }
                     .bold()
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(.color)
-                    .foregroundStyle(.white)
+                    Image(systemName: "fork.knife.circle")
+                }
+                .font(Font.custom("PatrickHandSC-Regular", size: 30))
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(.color)
+                .foregroundStyle(.white)
                 
                 Spacer()
                 
-                VStack {
-                    AsyncImage(url: Auth.auth().currentUser?.photoURL) { image in
-                        image
-                            .resizable()
-                            .frame(width: 160, height: 160)
-                            .scaledToFill()
-                            .clipShape(Circle())
-                            .overlay(
-                                Circle()
-                                    .stroke(.black, lineWidth: 2)
-                            )
-                    } placeholder: {
-                        Image(systemName: "person.crop.circle")
-                            .resizable()
-                            .frame(width: 160, height: 160)
-                            .scaledToFill()
-                            .clipShape(Circle())
-                    }
-
-                    if !textFieldsDisabled {
-                        Button("Change Image") {
-                            pickerIsPresented.toggle()
-                            textFieldsDisabled.toggle()
-                        }
-                        .buttonStyle(.bordered)
+                AsyncImage(url: Auth.auth().currentUser?.photoURL) { image in
+                    image
+                        .resizable()
+                        .frame(width: 180, height: 180)
+                        .scaledToFill()
+                        .clipShape(Circle())
+                        .overlay(
+                            Circle()
+                                .stroke(.black, lineWidth: 2)
+                        )
+                } placeholder: {
+                    ProgressView()
+                        .scaleEffect(4)
                         .tint(.color)
-                        .frame(height: 20)
+                }
+                
+                if !textFieldsDisabled {
+                    Button("Change Image") {
+                        pickerIsPresented.toggle()
+                        textFieldsDisabled.toggle()
                     }
+                    .buttonStyle(.bordered)
+                    .tint(.color)
+                    .frame(height: 20)
+                    .padding(.top)
+                    .font(Font.custom("PatrickHandSC-Regular", size: 20))
+                } else {
+                    Button("") { }
+                    .frame(height: 20)
+                    .padding(.top)
                 }
                 
                 Spacer()
@@ -69,17 +76,31 @@ struct ProfileView: View {
                 HStack {
                     Text("Name")
                         .font(Font.custom("PatrickHandSC-Regular", size: 20))
+                    
                     TextField("", text: $displayName)
                         .disabled(textFieldsDisabled)
                         .textFieldStyle(.roundedBorder)
                         .foregroundStyle(textFieldsDisabled ? .color : .black)
+                        .font(Font.custom("PatrickHandSC-Regular", size: 20))
+                    
+                    if !textFieldsDisabled {
+                        Button("Save") {
+                            textFieldsDisabled = true
+                            ProfileViewModel.updateUserProfile(displayName: displayName, photoURL: URL(string: ""))
+                            ProfileViewModel.refreshUserProfile()
+                        }
+                        .buttonStyle(.bordered)
+                        .tint(.color)
+                        .font(Font.custom("PatrickHandSC-Regular", size: 15))
+                        .frame(height: 15)
+                    }
                 }
                 .bold()
                 .padding()
                 
                 HStack {
                     Text("Email")
-                        .font(Font.custom("PatrickHandSC-Regular", size: 20))
+                    
                     TextField("", text: $email)
                         .disabled(true)
                         .textFieldStyle(.roundedBorder)
@@ -87,23 +108,7 @@ struct ProfileView: View {
                 }
                 .bold()
                 .padding(.horizontal)
-                
-                if !textFieldsDisabled {
-                    Button("Save") {
-                        textFieldsDisabled = true
-                        ProfileViewModel.updateUserProfile(displayName: displayName, photoURL: URL(string: ""))
-                        ProfileViewModel.refreshUserProfile()
-                    }
-                    .buttonStyle(.bordered)
-                    .tint(.black)
-                    .font(Font.custom("PatrickHandSC-Regular", size: 15))
-                    .frame(height: 15)
-                } else { // placeholder so the buttons don't shift down
-                    Button("Save") {
-                    }
-                    .frame(height: 15)
-                    .hidden()
-                }
+                .font(Font.custom("PatrickHandSC-Regular", size: 20))
                 
                 Spacer()
                 

@@ -12,17 +12,22 @@ struct RecipeView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                Text("Recipe Bytes")
-                    .font(Font.custom("PatrickHandSC-Regular", size: 40))
+                HStack {
+                    VStack {
+                        Text("Recipe Bytes")
+                    }
                     .bold()
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(.color)
-                    .foregroundStyle(.white)
+                    Image(systemName: "fork.knife.circle")
+                }
+                .font(Font.custom("PatrickHandSC-Regular", size: 30))
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(.color)
+                .foregroundStyle(.white)
                 
                 Spacer()
                 
-                Text("Hello \(Auth.auth().currentUser?.displayName ?? "Guest")!")
+                Text("Hello \(Auth.auth().currentUser?.displayName?.split(separator: " ")[0] ?? "Guest")!")
                     .customStyle()
                 
                 Spacer()

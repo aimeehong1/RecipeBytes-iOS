@@ -11,7 +11,7 @@ import SwiftUI
 struct CustomStyle: ViewModifier {
     func body(content: Content) -> some View {
         content
-            .font(Font.custom("PatrickHandSC-Regular", size: 15))
+            .font(Font.custom("PatrickHandSC-Regular", size: 20))
             .foregroundStyle(.white)
             .padding()
             .background(.color)

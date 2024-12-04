@@ -12,7 +12,7 @@ struct ContentView: View {
         TabView {
             RecipeView()
                 .tabItem {
-                    Image(systemName: "fork.knife.circle")
+                    Image(systemName: "frying.pan")
                     Text("Recipes")
                 }
             GroceryView()
@@ -32,6 +32,7 @@ struct ContentView: View {
                 }
         }
         .tabViewStyle(.sidebarAdaptable)
+        .tint(.color)
     }
 }
 

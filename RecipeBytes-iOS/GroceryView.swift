@@ -10,24 +10,34 @@ import SwiftUI
 struct GroceryView: View {
     var body: some View {
         VStack {
-            Text("Recipe Bytes")
-                .font(Font.custom("PatrickHandSC-Regular", size: 40))
+            HStack {
+                VStack {
+                    Text("Recipe Bytes")
+                }
                 .bold()
-                .padding()
-                .frame(maxWidth: .infinity)
-                .background(.color)
-                .foregroundStyle(.white)
+                Image(systemName: "fork.knife.circle")
+            }
+            .font(Font.custom("PatrickHandSC-Regular", size: 30))
+            .padding()
+            .frame(maxWidth: .infinity)
+            .background(.color)
+            .foregroundStyle(.white)
             
-            Spacer()
-            
-//            List {
-//                Text("Hello")
-//                Text("Hello")
-//            }
-//            .customStyle()
-//            .listStyle(.plain)
-//            .background(.color)
-//            .listRowBackground(Color.clear)
+            ScrollView {
+                VStack {
+                    Text("Grocery List")
+                        .font(Font.custom("PatrickHandSC-Regular", size: 25))
+
+                    List {
+                        Section {
+                            Text("Potatoes 🥔")
+                            Text("Produce")
+                        } header: {
+                            Text("Produce")
+                        }
+                    }
+                }
+            }
         }
     }
 }
