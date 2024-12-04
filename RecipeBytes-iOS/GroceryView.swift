@@ -31,7 +31,17 @@ struct GroceryView: View {
             NavigationStack {
                 VStack {
                     HStack {
-                        Button("") {}
+                        Button {
+                            //TODO: move items to grocery list
+                        } label: {
+                            VStack {
+                                Text("Move to")
+                                Text("Pantry")
+                                Image(systemName: "arrowshape.right.fill")
+                            }
+                            .font(Font.custom("PatrickHandSC-Regular", size: 15))
+                        }
+                        
                         Spacer()
                         
                         Text("Grocery List")
@@ -42,10 +52,14 @@ struct GroceryView: View {
                         Button {
                             sheetIsPresented.toggle()
                         } label: {
-                            Image(systemName: "plus")
-                                .tint(.logo)
+                            VStack {
+                                Text("Add Item")
+                                    .font(Font.custom("PatrickHandSC-Regular", size: 15))
+                                Image(systemName: "plus")
+                            }
                         }
                     }
+                    .tint(.logo)
                     .padding()
                  
                     groceryList
@@ -130,6 +144,7 @@ extension GroceryView {
                                 Button("Delete", role: .destructive) {
                                     ItemViewModel.deleteItem(item: item, collection: "grocery")
                                 }
+                                .tint(.logo)
                             }
                         }
                     }
