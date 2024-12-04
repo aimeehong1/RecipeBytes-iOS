@@ -8,16 +8,21 @@
 import Foundation
 import FirebaseFirestore
 import FirebaseStorage
+import FirebaseAuth
 
 @Observable
 class ItemViewModel {
 
     static func saveItem(item: Item, collection: String) async -> String? { // nil if effort failed, otherwise return place.id
         let db = Firestore.firestore()
+        guard let user = Auth.auth().currentUser else {
+            print("😡 ERROR: Could not retrieve current user")
+            return nil
+        }
         
         if let id = item.id { // if true the place exists
             do {
-                try db.collection("\(collection)").document(id).setData(from: item)
+                try db.collection("users").document(user.uid).collection(collection).document(id).setData(from: item)
                 print("😎 Data updated successfully!")
                 return id
             } catch {
@@ -26,7 +31,7 @@ class ItemViewModel {
             }
         } else { // if false we need to create a new document, and Firebase gives us a unique ID
             do {
-                let docRef = try db.collection("\(collection)").addDocument(from: item)
+                let docRef = try db.collection("users").document(user.uid).collection(collection).addDocument(from: item)
                 print("🐣 Data added successfully!")
                 return docRef.documentID
             } catch {
@@ -44,8 +49,12 @@ class ItemViewModel {
         
         let db = Firestore.firestore()
         let newValue = !item.isChecked
+        guard let user = Auth.auth().currentUser else {
+            print("😡 ERROR: Could not retrieve current user")
+            return
+        }
         
-        db.collection(collection).document(documentID).updateData(["isChecked": newValue]) { error in
+        db.collection("users").document(user.uid).collection(collection).document(documentID).updateData(["isChecked": newValue]) { error in
             if let error = error {
                 print("😡 ERROR: Could not update isChecked for \(item.name). \(error.localizedDescription)")
             } else {
@@ -56,6 +65,10 @@ class ItemViewModel {
     
     static func deleteItem(item: Item, collection: String) {
         let db = Firestore.firestore()
+        guard let user = Auth.auth().currentUser else {
+            print("😡 ERROR: Could not retrieve current user")
+            return
+        }
         guard let id = item.id else {
             print("No item.id")
             return
@@ -63,7 +76,7 @@ class ItemViewModel {
         
         Task {
             do {
-                try await db.collection(collection).document(id).delete()
+                try await db.collection("users").document(user.uid).collection(collection).document(id).delete()
             } catch {
                 print("😡 ERROR: Could not delete document \(id)")
             }

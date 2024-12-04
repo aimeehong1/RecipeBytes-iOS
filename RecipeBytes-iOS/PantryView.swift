@@ -7,9 +7,10 @@
 
 import SwiftUI
 import FirebaseFirestore
+import FirebaseAuth
 
 struct PantryView: View {
-    @FirestoreQuery(collectionPath: "pantry") var pantry: [Item]
+    @FirestoreQuery(collectionPath: "users/\(Auth.auth().currentUser!.uid)/pantry") var pantry: [Item] // force unwrap because they shouldn't be on this page without authorization
     @State private var categorizedItems: [FoodType: [Item]] = [:]
     @State private var sheetIsPresented = false
     var body: some View {
@@ -76,7 +77,7 @@ struct PantryView: View {
     
     func fetchCategoryData(for category: FoodType, completion: @escaping ([Item]) -> Void) {
         let db = Firestore.firestore()
-        db.collection("pantry").whereField("type", isEqualTo: category.rawValue).getDocuments { snapshot, error in
+        db.collection("users").document(Auth.auth().currentUser!.uid).collection("pantry").whereField("type", isEqualTo: category.rawValue).getDocuments { snapshot, error in
             if let error = error {
                 print("Error fetching \(category.rawValue): \(error.localizedDescription)")
                 completion([])
