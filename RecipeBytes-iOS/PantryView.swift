@@ -12,6 +12,7 @@ import FirebaseAuth
 struct PantryView: View {
     @FirestoreQuery(collectionPath: "users/\(Auth.auth().currentUser!.uid)/pantry") var pantry: [Item] // force unwrap because they shouldn't be on this page without authorization
     @State private var categorizedItems: [FoodType: [Item]] = [:]
+    @State private var isChecked: [Item] = []
     @State private var sheetIsPresented = false
     var body: some View {
         VStack {
@@ -32,7 +33,19 @@ struct PantryView: View {
                 VStack {
                     HStack {
                         Button {
-                            //TODO: move items to grocery list
+                            ItemViewModel.getCheckedItems(collection: "pantry") { result in
+                                switch result {
+                                case .success(let items):
+                                    for item in items {
+                                        isChecked.append(item)
+                                    }
+                                case .failure(let error):
+                                    print("😡 ERROR: failed to retrieve items. \(error.localizedDescription)")
+                                }
+                            }
+                            Task {
+                                await ItemViewModel.moveItem(items: isChecked, from: "pantry", to: "grocery")
+                            }
                         } label: {
                             VStack {
                                 Text("Move to")
@@ -159,7 +172,7 @@ extension PantryView {
                                     
                                     let expirationMessage = checkExpirationStatus(for: item.expirationDate)
                                     Text(expirationMessage)
-                                        .background(expirationMessage.contains("EXPIRE") ? .red : .logo)
+                                        .background(expirationMessage.contains("EXPIRE") ? .expired : .fresh)
                                 }
                             }
                             .font(Font.custom("PatrickHandSC-Regular", size: 20))

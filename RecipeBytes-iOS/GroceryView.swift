@@ -12,6 +12,7 @@ import FirebaseAuth
 struct GroceryView: View {
     @FirestoreQuery(collectionPath: "users/\(Auth.auth().currentUser!.uid)/grocery") var grocery: [Item] // force unwrap because they shouldn't be on this page without authorization
     @State private var categorizedItems: [FoodType: [Item]] = [:]
+    @State private var isChecked: [Item] = []
     @State private var sheetIsPresented = false
     var body: some View {
         VStack {
@@ -32,7 +33,19 @@ struct GroceryView: View {
                 VStack {
                     HStack {
                         Button {
-                            //TODO: move items to grocery list
+                            ItemViewModel.getCheckedItems(collection: "grocery") { result in
+                                switch result {
+                                case .success(let items):
+                                    for item in items {
+                                        isChecked.append(item)
+                                    }
+                                case .failure(let error):
+                                    print("😡 ERROR: failed to retrieve items. \(error.localizedDescription)")
+                                }
+                            }
+                            Task {
+                                await ItemViewModel.moveItem(items: isChecked, from: "grocery", to: "pantry")
+                            }
                         } label: {
                             VStack {
                                 Text("Move to")

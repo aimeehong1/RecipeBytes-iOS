@@ -12,7 +12,7 @@ import FirebaseAuth
 
 @Observable
 class ItemViewModel {
-
+    
     static func saveItem(item: Item, collection: String) async -> String? { // nil if effort failed, otherwise return place.id
         let db = Firestore.firestore()
         guard let user = Auth.auth().currentUser else {
@@ -83,35 +83,75 @@ class ItemViewModel {
         }
     }
     
-//    static func fetchCategoryData(for collection: String, category: FoodType, completion: @escaping ([Item]) -> Void) {
-//        let db = Firestore.firestore()
-//        db.collection(collection).whereField("type", isEqualTo: category.rawValue).getDocuments { snapshot, error in
-//            if let error = error {
-//                print("Error fetching \(category.rawValue): \(error.localizedDescription)")
-//                completion([])
-//            } else {
-//                let items = snapshot?.documents.compactMap { doc -> Item? in
-//                    try? doc.data(as: Item.self)
-//                } ?? []
-//                completion(items)
-//            }
-//        }
-//    }
-//
-//    static func fetchAllCategories(collection: String, completion: @escaping ([FoodType: [Item]]) -> Void){
-//        var categorizedItems: [FoodType: [Item]] = [:]
-//        let group = DispatchGroup()
-//
-//        for category in FoodType.allCases {
-//            group.enter()
-//            fetchCategoryData(for: collection, category: category ) { items in
-//                categorizedItems[category] = items
-//            }
-//        }
-//        group.notify(queue: .main) {
-//                print("Successfully fetched categorized items")
-//                completion(categorizedItems)
-//            }
-//    }
+    static func moveItem(items: [Item], from sourceCollection: String, to targetCollection: String) async -> Bool {
+        let db = Firestore.firestore()
+        
+        // Ensure the user is authenticated
+        guard let user = Auth.auth().currentUser else {
+            print("😡 ERROR: Could not retrieve current user")
+            return false
+        }
+        
+        // Fetch the document from the source collection
+        for item in items {
+            do {
+                guard let id = item.id else {
+                    print("😡 ERROR: Could not retrieve item")
+                    return false
+                }
+                
+                let sourceDocRef = db.collection("users").document(user.uid).collection(sourceCollection).document(id)
+                let snapshot = try await sourceDocRef.getDocument()
+                
+                guard snapshot.exists, let data = snapshot.data() else {
+                    print("😡 ERROR: Document with ID \(id) not found in \(sourceCollection).")
+                    return false
+                }
+                
+                // Create a new document in the target collection
+                let targetDocRef = db.collection("users").document(user.uid).collection(targetCollection).document(id)
+                try await targetDocRef.setData(data)
+                print("😀 Item successfully moved to \(targetCollection).")
+                
+                // Step 3: Delete the document from the source collection
+                try await sourceDocRef.delete()
+                print("😀 Item successfully removed from \(sourceCollection).")
+                
+            } catch {
+                print("😡 ERROR: Could not move item. \(error.localizedDescription)")
+                return false
+            }
+        }
+        return true
+    }
+    
+    static func getCheckedItems(collection: String, completion: @escaping (Result<[Item], Error>) -> Void) {
+        let db = Firestore.firestore()
+        
+        db.collection("users")
+            .document(Auth.auth().currentUser!.uid)
+            .collection(collection)
+            .whereField("isChecked", isEqualTo: true)
+            .getDocuments { querySnapshot, error in
+                if let error = error {
+                    print("😡 ERROR: could not retrieve documents from '\(collection)' collection. \(error.localizedDescription)")
+                    completion(.failure(error))
+                } else if let querySnapshot = querySnapshot {
+                    var items: [Item] = []
+                    
+                    for document in querySnapshot.documents {
+                        do {
+                            let item = try document.data(as: Item.self)
+                            items.append(item)
+                        } catch {
+                            print("😡 ERROR: Could not decode document \(error.localizedDescription)")
+                        }
+                    }
+                    
+                    completion(.success(items))
+                }
+            }
+    }
+    
 }
 
