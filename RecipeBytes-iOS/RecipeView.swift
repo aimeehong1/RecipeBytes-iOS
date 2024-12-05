@@ -9,6 +9,9 @@ import SwiftUI
 import FirebaseAuth
 
 struct RecipeView: View {
+    @State private var displayName = Auth.auth().currentUser?.displayName
+    @State private var profileVM = ProfileViewModel()
+
     var body: some View {
         NavigationStack {
             VStack {
@@ -27,11 +30,15 @@ struct RecipeView: View {
                 
                 Spacer()
                 
-                Text("Hello \(Auth.auth().currentUser?.displayName?.split(separator: " ")[0] ?? "Guest")!")
+                Text("Hello \(displayName?.split(separator: " ")[0] ?? "Guest")!")
                     .customStyle()
                 
                 Spacer()
             }
+        }
+        .task {
+            profileVM.refreshUserProfile()
+            displayName = Auth.auth().currentUser?.displayName ?? "Guest"
         }
     }
 }

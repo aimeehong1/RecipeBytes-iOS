@@ -197,8 +197,10 @@ struct LoginView: View {
                 showingAlert = true
             } else {
                 print("😎 Registration success!")
-                ProfileViewModel.updateUserProfile(displayName: displayName, photoURL: URL(string: ""))
-                presentSheet = true
+                Task {
+                    await ProfileViewModel.updateUserProfile(displayName: displayName, photoURL: URL(string: ""))
+                    presentSheet = true
+                }
             }
         }
     }

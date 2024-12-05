@@ -10,7 +10,7 @@ import FirebaseFirestore
 import FirebaseAuth
 
 struct GroceryView: View {
-    @FirestoreQuery(collectionPath: "users/\(Auth.auth().currentUser!.uid)/grocery") var grocery: [Item] // force unwrap because they shouldn't be on this page without authorization
+    @FirestoreQuery(collectionPath: "users/\(Auth.auth().currentUser?.uid ?? "")/grocery") var grocery: [Item]
     @State private var categorizedItems: [FoodType: [Item]] = [:]
     @State private var isChecked: [Item] = []
     @State private var sheetIsPresented = false
@@ -95,7 +95,7 @@ struct GroceryView: View {
             .onChange(of: grocery) {
                 fetchAllCategories()
             }
-            .sheet(isPresented: $sheetIsPresented) {
+            .fullScreenCover(isPresented: $sheetIsPresented) {
                 NavigationStack {
                     ItemDetailView(item: Item(), collection: "grocery")
                 }
@@ -105,7 +105,7 @@ struct GroceryView: View {
     
     func fetchCategoryData(for category: FoodType, completion: @escaping ([Item]) -> Void) {
         let db = Firestore.firestore()
-        db.collection("users").document(Auth.auth().currentUser!.uid).collection("grocery").whereField("type", isEqualTo: category.rawValue).getDocuments { snapshot, error in
+        db.collection("users").document(Auth.auth().currentUser?.uid ?? "").collection("grocery").whereField("type", isEqualTo: category.rawValue).getDocuments { snapshot, error in
             if let error = error {
                 print("Error fetching \(category.rawValue): \(error.localizedDescription)")
                 completion([])

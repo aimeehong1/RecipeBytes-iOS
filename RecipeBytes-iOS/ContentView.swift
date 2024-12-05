@@ -33,9 +33,6 @@ struct ContentView: View {
         }
         .tabViewStyle(.sidebarAdaptable)
         .tint(.logo)
-        .task {
-            ProfileViewModel.refreshUserProfile()
-        }
     }
 }
 

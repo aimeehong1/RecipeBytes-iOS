@@ -20,6 +20,10 @@ struct ProfileView: View {
     @State private var selectedImage = Image(systemName: "person.crop.circle")
     @State private var selectedPhoto: PhotosPickerItem?
     @State private var pickerIsPresented = false
+    @State private var profileVM = ProfileViewModel()
+    var currentUser: User? {
+        Auth.auth().currentUser
+    }
     
     var body: some View {
         NavigationStack {
@@ -39,13 +43,8 @@ struct ProfileView: View {
                 
                 Spacer()
                 
-                if Auth.auth().currentUser?.photoURL == nil {
-                    Image(systemName: "person.circle")
-                        .resizable()
-                        .frame(width: 180, height: 180)
-                        .scaledToFill()
-                } else {
-                    AsyncImage(url: Auth.auth().currentUser?.photoURL) { image in
+                if let photoURL = profileVM.photoURL {
+                    AsyncImage(url: currentUser?.photoURL) { image in
                         image
                             .resizable()
                             .frame(width: 180, height: 180)
@@ -60,10 +59,19 @@ struct ProfileView: View {
                             .scaleEffect(4)
                             .tint(.logo)
                     }
+                } else {
+                    Image(systemName: "person.circle")
+                        .resizable()
+                        .frame(width: 180, height: 180)
+                        .scaledToFill()
                 }
+                
                 if !textFieldsDisabled {
                     Button("Change Image") {
-                        pickerIsPresented.toggle()
+                        Task {
+                            await handleSelectedPhoto()
+                            pickerIsPresented.toggle()
+                        }
                         textFieldsDisabled.toggle()
                     }
                     .buttonStyle(.bordered)
@@ -71,7 +79,7 @@ struct ProfileView: View {
                     .frame(height: 20)
                     .padding(.top)
                     .font(Font.custom("PatrickHandSC-Regular", size: 20))
-                } else {
+                } else { // prevent view from shifting up and down
                     Button("") { }
                         .frame(height: 20)
                         .padding(.top)
@@ -92,8 +100,11 @@ struct ProfileView: View {
                     if !textFieldsDisabled {
                         Button("Save") {
                             textFieldsDisabled = true
-                            ProfileViewModel.updateUserProfile(displayName: displayName, photoURL: URL(string: ""))
-                            ProfileViewModel.refreshUserProfile()
+                            Task {
+                                await ProfileViewModel.updateUserProfile(displayName: profileVM.displayName, photoURL: profileVM.photoURL
+                                )
+                            }
+                            profileVM.refreshUserProfile()
                         }
                         .buttonStyle(.bordered)
                         .tint(.logo)
@@ -143,33 +154,37 @@ struct ProfileView: View {
         .photosPicker(isPresented: $pickerIsPresented, selection: $selectedPhoto)
         .onChange(of: selectedPhoto) {
             Task {
-                do {
-                    if let image = try await selectedPhoto?.loadTransferable(type: Image.self) {
-                        selectedImage = image
-                    }
-                    // Let's get data from the selectedPhoto
-                    guard let transferredData = try await selectedPhoto?.loadTransferable(type: Data.self) else {
-                        print("😡 ERROR: Could not convert selectedPhoto into data")
-                        return
-                    }
-                    data = transferredData
-                    let imageURL = await ProfileViewModel.saveImage(data: data)
-                    if let imageURL = imageURL {
-                        ProfileViewModel.updateUserProfile(displayName: displayName, photoURL: imageURL)
-                        ProfileViewModel.refreshUserProfile()
-                    } else {
-                        print("😡 ERROR: Could not save image and update profile.")
-                    }
-                } catch {
-                    print("😡 ERROR: COuld not create Image from selectedPhoto \(error.localizedDescription)")
-                }
+                await handleSelectedPhoto()
             }
         }
+        .onAppear() {
+            profileVM.refreshUserProfile()
+        }
         .task {
-            ProfileViewModel.refreshUserProfile()
-            displayName = Auth.auth().currentUser?.displayName ?? "Guest"
+            profileVM.refreshUserProfile()
+            displayName = currentUser?.displayName ?? "Guest"
         }
     }
+    
+    func handleSelectedPhoto() async {
+        do {
+            // Let's get data from the selectedPhoto
+            guard let transferredData = try await selectedPhoto?.loadTransferable(type: Data.self) else {
+                print("😡 ERROR: Could not convert selectedPhoto into data")
+                return
+            }
+            data = transferredData
+            if let imageURL = await profileVM.saveImage(data: data) {
+                await ProfileViewModel.updateUserProfile(displayName: displayName, photoURL: imageURL)
+                profileVM.refreshUserProfile()
+            } else {
+                print("😡 ERROR: Could not save image and update profile.")
+            }
+        } catch {
+            print("😡 ERROR: COuld not create Image from selectedPhoto \(error.localizedDescription)")
+        }
+    }
+    
 }
 
 #Preview {

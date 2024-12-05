@@ -12,7 +12,10 @@ import FirebaseAuth
 
 @Observable
 class ProfileViewModel {
-    static func updateUserProfile(displayName: String, photoURL: URL?) {
+    var displayName: String = ""
+    var photoURL: URL?
+    
+    static func updateUserProfile(displayName: String, photoURL: URL?) async {
         guard let user = Auth.auth().currentUser else { return }
         let changeRequest = user.createProfileChangeRequest()
         changeRequest.displayName = displayName
@@ -20,16 +23,15 @@ class ProfileViewModel {
         if let photoURL = photoURL {
             changeRequest.photoURL = photoURL
         }
-        changeRequest.commitChanges { (error) in
-            if let error = error {
-                print("😡 ERROR: problem updating user's display name. \(error.localizedDescription)")
-            } else {
-                print("😀 SUCCESS: Profile updated successfully!")
-            }
+        do {
+            try await changeRequest.commitChanges()
+            print("😀 SUCCESS: Profile updated successfully!")
+        } catch {
+            print("😡 ERROR: problem updating user's display name. \(error.localizedDescription)")
         }
     }
     
-    static func refreshUserProfile() {
+    func refreshUserProfile() {
         guard let user = Auth.auth().currentUser else { return }
         
         user.reload() { error in
@@ -44,7 +46,7 @@ class ProfileViewModel {
         }
     }
     
-    static func saveImage(data: Data) async -> URL? {
+    func saveImage(data: Data) async -> URL? {
         guard let user = Auth.auth().currentUser else {
             print("😡 ERROR: Could not get current user")
             return nil
@@ -65,7 +67,7 @@ class ProfileViewModel {
             }
             // save the url to the Firestore database (cloud Firestore)
             let displayName = user.displayName ?? "Anonymous"
-            ProfileViewModel.updateUserProfile(displayName: displayName, photoURL: url)
+            await ProfileViewModel.updateUserProfile(displayName: displayName, photoURL: url)
             print("Updated profileURL: \(url)")
             
             // Save the URL to Firestore

@@ -41,7 +41,7 @@ struct ItemDetailView: View {
                 HStack {
                     Text("Quantity:")
                     Stepper("\(quantity)", value: $quantity, in: 0...100)
-                        .foregroundStyle(.logo)
+                        .foregroundStyle(.darkerLogo)
                 }
                 .font(Font.custom("PatrickHandSC-Regular", size: 23))
                 .padding(.bottom)
