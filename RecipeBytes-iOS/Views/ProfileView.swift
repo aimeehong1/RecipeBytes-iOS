@@ -158,6 +158,7 @@ struct ProfileView: View {
             }
         }
         .onAppear() {
+            textFieldsDisabled = true
             profileVM.refreshUserProfile()
         }
         .task {

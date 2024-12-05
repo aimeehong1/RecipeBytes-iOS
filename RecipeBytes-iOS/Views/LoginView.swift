@@ -55,7 +55,7 @@ struct LoginView: View {
                         .autocorrectionDisabled()
                         .textInputAutocapitalization(.never)
                         .submitLabel(.next)
-                        .focused($focusField, equals: .email) // this field is bound to the .email case
+                        .focused($focusField, equals: .email)
                         .onSubmit {
                             focusField = .password
                         }
