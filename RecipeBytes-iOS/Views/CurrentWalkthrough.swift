@@ -9,20 +9,78 @@ import SwiftUI
 
 struct CurrentWalkthrough: View {
     @State var recipe: Recipe
+    @State private var listIndex = 1
     
     var body: some View {
-        var instructionSteps = recipe.instructions.split(separator: "\r\n", omittingEmptySubsequences: true)
-        ForEach(0..<instructionSteps.count) { index in
-            HStack {
-                Text("\(index + 1).")
-                    .foregroundStyle(.logo)
-                    .bold()
-                
-                Text(instructionSteps[index])
+        let instructionSteps = recipe.instructions.split(separator: "\r\n", omittingEmptySubsequences: true)
+        
+        TabView {
+            NavigationStack {
+                VStack {
+                    Text("Instructions")
+                        .font(Font.custom("PatrickHandSC-Regular", size: 40))
+                    
+                    Spacer()
+                    
+                    Text(instructionSteps[listIndex] ?? "")
+                        .font(Font.custom("PatrickHandSC-Regular", size: 20))
+                    
+                    HStack {
+                        Button {
+                            listIndex -= 1
+                        } label: {
+                            Text("Previous Step")
+                        }
+                        .disabled(listIndex <= 0)
+                        Spacer()
+                        Button {
+                            listIndex += 1
+                        } label: {
+                            Text("Next Step")
+                        }
+                        .disabled(listIndex >= instructionSteps.count - 1)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(.logo)
                     .font(Font.custom("PatrickHandSC-Regular", size: 20))
+
+                    Spacer()
+                    
+                    Text("Swipe → for Instructions List View")
+                        .font(Font.custom("PatrickHandSC-Regular", size: 20))
+                        .foregroundStyle(.darkerLogo)
+                }
             }
             .padding()
+            .tag(0)
+            
+            VStack {
+                Text("Instructions")
+                    .font(Font.custom("PatrickHandSC-Regular", size: 40))
+                
+                List {
+                    ForEach(0..<instructionSteps.count) { index in
+                        HStack {
+                            Text("\(index + 1).")
+                                .foregroundStyle(.logo)
+                                .bold()
+                            
+                            Text(instructionSteps[index])
+                                .font(Font.custom("PatrickHandSC-Regular", size: 20))
+                        }
+                        .padding()
+                    }
+                }
+                .listStyle(.plain)
+                
+                Text("Swipe ← for Instructions Steps")
+                    .font(Font.custom("PatrickHandSC-Regular", size: 20))
+                    .foregroundStyle(.darkerLogo)
+                    
+            }
+            .tag(1)
         }
+        .tabViewStyle(.page)
     }
 }
 
