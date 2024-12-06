@@ -20,7 +20,7 @@ struct ProfileView: View {
     @State private var selectedImage = Image(systemName: "person.crop.circle")
     @State private var selectedPhoto: PhotosPickerItem?
     @State private var pickerIsPresented = false
-    @State private var profileVM = ProfileViewModel()
+//    @State private var profileVM = ProfileViewModel()
     var currentUser: User? {
         Auth.auth().currentUser
     }
@@ -43,7 +43,7 @@ struct ProfileView: View {
                 
                 Spacer()
                 
-                if let photoURL = profileVM.photoURL {
+                if let photoURL = currentUser?.photoURL {
                     AsyncImage(url: currentUser?.photoURL) { image in
                         image
                             .resizable()
@@ -101,10 +101,9 @@ struct ProfileView: View {
                         Button("Save") {
                             textFieldsDisabled = true
                             Task {
-                                await ProfileViewModel.updateUserProfile(displayName: profileVM.displayName, photoURL: profileVM.photoURL
-                                )
+                                await ProfileViewModel.updateUserName(displayName: displayName)
                             }
-                            profileVM.refreshUserProfile()
+                            ProfileViewModel.refreshUserProfile()
                         }
                         .buttonStyle(.bordered)
                         .tint(.logo)
@@ -132,6 +131,7 @@ struct ProfileView: View {
                 HStack {
                     Button("Update Profile") {
                         textFieldsDisabled.toggle()
+                        ProfileViewModel.refreshUserProfile()
                     }
                     Button("Sign Out") {
                         do {
@@ -159,10 +159,7 @@ struct ProfileView: View {
         }
         .onAppear() {
             textFieldsDisabled = true
-            profileVM.refreshUserProfile()
-        }
-        .task {
-            profileVM.refreshUserProfile()
+            ProfileViewModel.refreshUserProfile()
             displayName = currentUser?.displayName ?? "Guest"
         }
     }
@@ -175,9 +172,15 @@ struct ProfileView: View {
                 return
             }
             data = transferredData
-            if let imageURL = await profileVM.saveImage(data: data) {
-                await ProfileViewModel.updateUserProfile(displayName: displayName, photoURL: imageURL)
-                profileVM.refreshUserProfile()
+            if let imageURL = await ProfileViewModel.saveImage(data: data) {
+                await ProfileViewModel.updateUserPhoto(photoURL: imageURL)
+                Auth.auth().currentUser?.reload { error in
+                    if let error = error {
+                        print("😡 ERROR: Could not reload user: \(error.localizedDescription)")
+                    } else {
+                        ProfileViewModel.refreshUserProfile()
+                    }
+                }
             } else {
                 print("😡 ERROR: Could not save image and update profile.")
             }

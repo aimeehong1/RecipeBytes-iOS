@@ -198,7 +198,7 @@ struct LoginView: View {
             } else {
                 print("😎 Registration success!")
                 Task {
-                    await ProfileViewModel.updateUserProfile(displayName: displayName, photoURL: URL(string: ""))
+                    await ProfileViewModel.updateUserName(displayName: displayName)
                     presentSheet = true
                 }
             }

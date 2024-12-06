@@ -15,10 +15,22 @@ class ProfileViewModel {
     var displayName: String = ""
     var photoURL: URL?
     
-    static func updateUserProfile(displayName: String, photoURL: URL?) async {
+    static func updateUserName(displayName: String) async {
         guard let user = Auth.auth().currentUser else { return }
         let changeRequest = user.createProfileChangeRequest()
         changeRequest.displayName = displayName
+        
+        do {
+            try await changeRequest.commitChanges()
+            print("😀 SUCCESS: Profile updated successfully!")
+        } catch {
+            print("😡 ERROR: problem updating user's display name. \(error.localizedDescription)")
+        }
+    }
+    
+    static func updateUserPhoto(photoURL: URL?) async {
+        guard let user = Auth.auth().currentUser else { return }
+        let changeRequest = user.createProfileChangeRequest()
         
         if let photoURL = photoURL {
             changeRequest.photoURL = photoURL
@@ -31,7 +43,7 @@ class ProfileViewModel {
         }
     }
     
-    func refreshUserProfile() {
+    static func refreshUserProfile() {
         guard let user = Auth.auth().currentUser else { return }
         
         user.reload() { error in
@@ -46,7 +58,7 @@ class ProfileViewModel {
         }
     }
     
-    func saveImage(data: Data) async -> URL? {
+    static func saveImage(data: Data) async -> URL? {
         guard let user = Auth.auth().currentUser else {
             print("😡 ERROR: Could not get current user")
             return nil
@@ -67,7 +79,7 @@ class ProfileViewModel {
             }
             // save the url to the Firestore database (cloud Firestore)
             let displayName = user.displayName ?? "Anonymous"
-            await ProfileViewModel.updateUserProfile(displayName: displayName, photoURL: url)
+            await ProfileViewModel.updateUserPhoto(photoURL: url)
             print("Updated profileURL: \(url)")
             
             // Save the URL to Firestore
