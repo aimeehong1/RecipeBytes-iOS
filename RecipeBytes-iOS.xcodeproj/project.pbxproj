@@ -24,6 +24,7 @@
 		908202B42CFC2602002C77CF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 908202AA2CFC2602002C77CF /* Assets.xcassets */; };
 		909313752CFE2DEB00B5E54A /* PatrickHandSC-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 909313742CFE2DEB00B5E54A /* PatrickHandSC-Regular.ttf */; };
 		909313792CFE846E00B5E54A /* CustomStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 909313782CFE846E00B5E54A /* CustomStyle.swift */; };
+		90E45A602D035132005FEA66 /* CurrentWalkthrough.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90E45A5F2D035132005FEA66 /* CurrentWalkthrough.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +44,7 @@
 		909313732CFE2DDD00B5E54A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		909313742CFE2DEB00B5E54A /* PatrickHandSC-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PatrickHandSC-Regular.ttf"; sourceTree = "<group>"; };
 		909313782CFE846E00B5E54A /* CustomStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomStyle.swift; sourceTree = "<group>"; };
+		90E45A5F2D035132005FEA66 /* CurrentWalkthrough.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentWalkthrough.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -97,6 +99,7 @@
 				906BAFFA2D019A6900F62E4F /* ContentView.swift */,
 				906BB0012D019A6900F62E4F /* RecipeView.swift */,
 				906BB00D2D01A27700F62E4F /* RecipeDetailView.swift */,
+				90E45A5F2D035132005FEA66 /* CurrentWalkthrough.swift */,
 				906BAFFB2D019A6900F62E4F /* GroceryView.swift */,
 				906BAFFE2D019A6900F62E4F /* PantryView.swift */,
 				906BAFFC2D019A6900F62E4F /* ItemDetailView.swift */,
@@ -222,6 +225,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				906BB00E2D01A27800F62E4F /* RecipeDetailView.swift in Sources */,
+				90E45A602D035132005FEA66 /* CurrentWalkthrough.swift in Sources */,
 				906BB0032D019A6900F62E4F /* ContentView.swift in Sources */,
 				906BB0042D019A6900F62E4F /* GroceryView.swift in Sources */,
 				906BB0052D019A6900F62E4F /* ItemDetailView.swift in Sources */,
