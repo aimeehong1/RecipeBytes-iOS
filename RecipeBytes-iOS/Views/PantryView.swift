@@ -44,7 +44,9 @@ struct PantryView: View {
                                 }
                             }
                             Task {
-                                await ItemViewModel.moveItem(items: isChecked, from: "pantry", to: "grocery")
+                                if await ItemViewModel.moveItem(items: isChecked, from: "pantry", to: "grocery") == true {
+                                    let _ = print("Moved \(isChecked) from pantry to grocery")
+                                }
                             }
                         } label: {
                             VStack {

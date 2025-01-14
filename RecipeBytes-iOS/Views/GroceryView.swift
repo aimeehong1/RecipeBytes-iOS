@@ -45,7 +45,9 @@ struct GroceryView: View {
                             }
                             Task {
                                 ItemViewModel.refreshUserProfile()
-                                await ItemViewModel.moveItem(items: isChecked, from: "grocery", to: "pantry")
+                                if await ItemViewModel.moveItem(items: isChecked, from: "grocery", to: "pantry") == true {
+                                    let _ = print("Moved \(isChecked) from grocery to pantry")
+                                }
                             }
                         } label: {
                             VStack {

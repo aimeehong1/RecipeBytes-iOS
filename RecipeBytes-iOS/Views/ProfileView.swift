@@ -44,7 +44,7 @@ struct ProfileView: View {
                 Spacer()
                 
                 if let photoURL = currentUser?.photoURL {
-                    AsyncImage(url: currentUser?.photoURL) { image in
+                    AsyncImage(url: photoURL) { image in
                         image
                             .resizable()
                             .frame(width: 180, height: 180)

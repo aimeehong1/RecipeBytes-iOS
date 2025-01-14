@@ -83,7 +83,7 @@ struct ItemDetailView: View {
                         item.quantity = quantity
                         item.type = type
                         item.expirationDate = expirationDate
-                        await ItemViewModel.saveItem(item: item, collection: collection)
+                        let _ = print(await ItemViewModel.saveItem(item: item, collection: collection) ?? "No item.id")
                     }
                     dismiss()
                 }
