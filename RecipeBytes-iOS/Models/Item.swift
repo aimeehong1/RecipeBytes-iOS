@@ -12,7 +12,7 @@ enum FoodType: String, CaseIterable, Codable {
     case produce, protein, dairy, grains, other
 }
 
-struct Item: Codable, Identifiable, Equatable {
+struct Item: Codable, Identifiable, Equatable, Hashable {
     @DocumentID var id: String?
     var name = ""
     var quantity = 0

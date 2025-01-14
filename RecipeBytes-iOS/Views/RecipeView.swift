@@ -15,7 +15,6 @@ struct RecipeView: View {
     @State private var profileVM = ProfileViewModel()
     
     var body: some View {
-        
         VStack {
             HStack {
                 VStack {
@@ -31,7 +30,7 @@ struct RecipeView: View {
             .foregroundStyle(.white)
             
             NavigationStack {
-                List(recipes.meals) { meal in
+                List(searchResults) { meal in
                     NavigationLink {
                         RecipeDetailView(recipe: meal)
                     } label: {
@@ -47,6 +46,14 @@ struct RecipeView: View {
         }
         .task {
             await recipes.getData()
+        }
+    }
+    
+    var searchResults: [Recipe] {
+        if searchText.isEmpty {
+            return recipes.meals
+        } else {
+            return recipes.meals.filter {$0.name.capitalized.contains(searchText)}
         }
     }
     

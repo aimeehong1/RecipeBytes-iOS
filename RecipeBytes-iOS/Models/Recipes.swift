@@ -32,8 +32,9 @@ class Recipes {
                 print("😡 JSON ERROR: could not decode returned JSON data")
                 return
             }
+
             Task { @MainActor in
-                self.meals = self.meals + returned.meals
+                self.meals = Array(Set(returned.meals + self.meals))
                 print("Returned \(returned)")
                 await loadList()
             }

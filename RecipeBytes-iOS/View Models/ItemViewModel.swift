@@ -83,8 +83,22 @@ class ItemViewModel {
         }
     }
     
+    static func refreshUserProfile() {
+        guard let user = Auth.auth().currentUser else { return }
+        
+        user.reload() { error in
+            if let error = error {
+                print("😡 ERROR: problem reloading user data: \(error.localizedDescription)")
+            } else {
+                print("😀 User data reloaded successfully!")
+            }
+        }
+    }
+    
     static func moveItem(items: [Item], from sourceCollection: String, to targetCollection: String) async -> Bool {
         let db = Firestore.firestore()
+        
+        ItemViewModel.refreshUserProfile()
         
         // Ensure the user is authenticated
         guard let user = Auth.auth().currentUser else {

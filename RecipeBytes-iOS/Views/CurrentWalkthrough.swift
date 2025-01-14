@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CurrentWalkthrough: View {
     @State var recipe: Recipe
-    @State private var listIndex = 1
+    @State private var listIndex = 0
     
     var body: some View {
         let instructionSteps = recipe.instructions.split(separator: "\r\n", omittingEmptySubsequences: true)
@@ -22,8 +22,10 @@ struct CurrentWalkthrough: View {
                     
                     Spacer()
                     
-                    Text(instructionSteps[listIndex] ?? "")
-                        .font(Font.custom("PatrickHandSC-Regular", size: 20))
+                    if instructionSteps[listIndex].count > 3 {
+                        Text(instructionSteps[listIndex])
+                            .font(Font.custom("PatrickHandSC-Regular", size: 20))
+                    }
                     
                     HStack {
                         Button {
@@ -60,15 +62,17 @@ struct CurrentWalkthrough: View {
                 
                 List {
                     ForEach(0..<instructionSteps.count) { index in
-                        HStack {
-                            Text("\(index + 1).")
-                                .foregroundStyle(.logo)
-                                .bold()
-                            
-                            Text(instructionSteps[index])
-                                .font(Font.custom("PatrickHandSC-Regular", size: 20))
+                        if instructionSteps[index].count > 3 {
+                            HStack {
+                                Text("\(index + 1).")
+                                    .foregroundStyle(.logo)
+                                    .bold()
+                                
+                                Text(instructionSteps[index])
+                                    .font(Font.custom("PatrickHandSC-Regular", size: 20))
+                            }
+                            .padding()
                         }
-                        .padding()
                     }
                 }
                 .listStyle(.plain)
@@ -80,7 +84,7 @@ struct CurrentWalkthrough: View {
             }
             .tag(1)
         }
-        .tabViewStyle(.page)
+        .tabViewStyle(.page(indexDisplayMode: .never))
     }
 }
 

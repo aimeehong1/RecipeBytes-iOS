@@ -44,6 +44,7 @@ struct GroceryView: View {
                                 }
                             }
                             Task {
+                                ItemViewModel.refreshUserProfile()
                                 await ItemViewModel.moveItem(items: isChecked, from: "grocery", to: "pantry")
                             }
                         } label: {

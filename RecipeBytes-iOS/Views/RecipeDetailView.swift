@@ -49,8 +49,9 @@ struct RecipeDetailView: View {
                 
                 List {
                     Text("Ingredients")
-                    ScrollView {
-                        ForEach(ingredients) { ingredient in
+                    ForEach(ingredients, id: \.self) { ingredient in
+//                        let _ = print("INGREDIENT: \(ingredient)")
+                        if ingredient.name != "" {
                             HStack {
                                 Image(systemName: ingredient.isChecked ? "checkmark.square" : "square")
                                 
@@ -80,14 +81,16 @@ struct RecipeDetailView: View {
                 .tint(.logo)
             }
         }
+        .tint(.logo)
         .task {
             loadIngredients()
         }
     }
     func loadIngredients() {
+        print("⭐️ ingredients: \(recipe.ingredients)")
         let recipeIngredients = recipe.ingredients
         ingredients = recipeIngredients.map { Item(name: $0) }
-        print(ingredients)
+        print("😎 \(ingredients)")
     }
 }
 
